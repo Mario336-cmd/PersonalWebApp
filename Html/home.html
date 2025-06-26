@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Mario Uushunga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://unpkg.com/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js" defer></script>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <style>
+    body{opacity:0;transition:opacity .5s ease}
+    body.fade-in{opacity:1}
+    body.fade-out{opacity:0}
+  </style>
+</head>
+<body class="fade-in relative overflow-x-hidden text-white">
+  <nav class="fixed top-0 w-full h-16 bg-gray-900/90 backdrop-blur flex items-center z-30">
+    <ul class="flex justify-center w-full space-x-12">
+      <li><a href="#welcome" data-item="Home">Home</a></li>
+      <li><a href="#certifications" data-item="Certifications">Certifications</a></li>
+      <li><a href="#contact" data-item="Contact">Contact</a></li>
+      <li><a id="game-link" href="game.html" data-item="Game">Game</a></li>
+    </ul>
+  </nav>
+  <section id="welcome" class="section flex flex-col items-center justify-center pt-16 h-screen">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+    <h1 data-tilt data-tilt-glare="true" data-tilt-max-glare="0.5" class="tilt text-5xl font-bold cursor-pointer">Welcome! 👋🏽</h1>
+    <p class="mt-8 max-w-2xl text-center text-xl px-4 leading-relaxed">
+      My name is Mario Uushunga. I am currently a 3rd year student at the Namibia
+      University of Science and Technology doing Computer Science (Software
+      Development). I am passionate about Software Development and creating cool
+      stuff through the wonderful world of technology. I'm glad to see you here and
+      can't wait to collaborate on fun, cool, and impactful projects. By the way, there's a game cool game waiting for you if you click the link. 😅.
+    </p>
+  </section>
+  <section id="certifications" class="section flex flex-col items-center justify-center bg-gray-900 h-screen">
+    <h2 class="text-4xl font-bold mb-12">Certifications</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4 max-w-6xl">
+      <div class="cert-card fill">
+        <img src="../Images/Screenshot 2025-06-25 195238.png" class="rounded mb-4 border border-gray-600"/>
+        <a href="https://www.freecodecamp.org/certification/MarioUushunga/responsive-web-design" class="cert-link" data-item="Responsive Web Design" target="_blank" rel="noopener noreferrer">Responsive Web Design</a>
+      </div>
+      <div class="cert-card fill">
+        <img src="../Images/Screenshot 2025-06-25 195320.png" class="rounded mb-4 border border-gray-600"/>
+        <a href="https://www.freecodecamp.org/certification/MarioUushunga/javascript-algorithms-and-data-structures-v8" class="cert-link" data-item="JS Algorithms & Data Structures" target="_blank" rel="noopener noreferrer">JS Algorithms & Data Structures</a>
+      </div>
+      <div class="cert-card fill">
+        <img src="../Images/Screenshot 2025-06-25 195345.png" class="rounded mb-4 border border-gray-600"/>
+        <a href="https://www.freecodecamp.org/certification/MarioUushunga/front-end-development-libraries" class="cert-link" data-item="Front End Development Libraries" target="_blank" rel="noopener noreferrer">Front End Development Libraries</a>
+      </div>
+      <div class="cert-card fill">
+        <img src="../Images/Screenshot 2025-06-25 195411.png" class="rounded mb-4 border border-gray-600"/>
+        <a href="https://www.freecodecamp.org/certification/MarioUushunga/data-visualization" class="cert-link" data-item="Data Visualization" target="_blank" rel="noopener noreferrer">Data Visualization</a>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="section py-20 bg-gray-800">
+    <h2 class="text-4xl font-bold mb-8 text-center">Send me an Email</h2>
+    <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 max-w-3xl mx-auto">
+      <div class="space-y-6">
+        <div>
+          <label for="name" class="block mb-2">Name/Organization:</label>
+          <input id="name" name="name" required placeholder="Your name/Organization" class="form-input"/>
+        </div>
+        <div>
+          <label for="email" class="block mb-2">Email:</label>
+          <input id="email" type="email" name="email" required placeholder="example@gmail.com" class="form-input"/>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="message" class="block mb-2">Message:</label>
+        <textarea id="message" name="message" rows="8" required placeholder="Your message…" class="form-input flex-1 mb-4"></textarea>
+        <div class="flex space-x-6">
+          <button type="submit" class="form-btn">Send</button>
+          <button type="button" id="clear-btn" class="form-btn">Clear</button>
+        </div>
+      </div>
+    </form>
+  </section>
+  <footer class="py-6 bg-black text-gray-400 text-left px-4">© 2025 Mario Uushunga</footer>
+  <button x-data="{ visible: false }" x-show="visible" @scroll.window="visible = pageYOffset > innerHeight" @click="scrollTo({ top: 0, behavior: 'smooth' })" class="back-to-top">↑</button>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.body.classList.add('fade-in');
+      const gameLink=document.getElementById('game-link');
+      gameLink.addEventListener('click',e=>{
+        e.preventDefault();
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(()=>window.location=gameLink.href,500);
+      });
+    });
+  </script>
+  <script defer src="../Javascript/home.js"></script>
+</body>
+</html>

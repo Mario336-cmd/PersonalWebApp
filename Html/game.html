@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Star Dodger</title>
+  <link rel="stylesheet" href="../CSS/game.css"/>
+  <script defer src="../Javascript/game.js"></script>
+  <style>
+    body{opacity:0;transition:opacity .5s ease}
+    body.fade-in{opacity:1}
+    body.fade-out{opacity:0}
+    .nav-icon{position:absolute;top:10px;left:10px;z-index:10;display:block}
+    .nav-icon svg{
+      width:48px;
+      height:48px;
+      fill:#38bdf8;
+    }
+  </style>
+</head>
+<body class="fade-in">
+  <a id="back-link" class="nav-icon" href="home.html" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+  </a>
+  <canvas id="gameCanvas" width="600" height="800"></canvas>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.body.classList.add('fade-in');
+      const backLink=document.getElementById('back-link');
+      backLink.addEventListener('click',e=>{
+        e.preventDefault();
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(()=>window.location=backLink.href,500);
+      });
+    });
+  </script>
+</body>
+</html>
