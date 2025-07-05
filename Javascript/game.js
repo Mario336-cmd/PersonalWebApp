@@ -1,20 +1,32 @@
 const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const WIDTH = canvas.width;
+const ctx    = canvas.getContext('2d');
+
+const startScreen    = document.getElementById('start-screen');
+const shipScreen     = document.getElementById('ship-screen');
+const diffScreen     = document.getElementById('difficulty-screen');
+const gameoverScreen = document.getElementById('gameover-screen');
+
+const startBtn      = document.getElementById('start-button');
+const selectShipBtn = document.getElementById('select-ship');
+const selectDiffBtn = document.getElementById('select-difficulty');
+
+const chooseAlien  = document.getElementById('choose-triangle');
+const chooseRocket = document.getElementById('choose-rocket');
+const shipBackBtn  = document.getElementById('ship-back');
+
+const diffBackBtn = document.getElementById('diff-back');
+const diffButtons = Array.from(diffScreen.querySelectorAll('button[data-diff]'));
+
+const retryBtn     = document.getElementById('retry-button');
+const homeBtn      = document.getElementById('home-button');
+const finalScoreEl = document.getElementById('final-score');
+
+const alienEl  = document.getElementById('triangleShip');
+const rocketEl = document.getElementById('rocketShip');
+
+const WIDTH  = canvas.width;
 const HEIGHT = canvas.height;
 
-// Colors & sizes
-const STAR_BACK_COLOR   = '#444';
-const STAR_FRONT_COLOR  = '#888';
-const BLOCK_COLOR       = '#fff';
-const SHIP_FILL_COLOR   = '#0ff';
-const SHIP_BORDER_COLOR = '#f0f';
-const SHIP_WIDTH        = 60;
-const SHIP_HEIGHT       = 40;
-// Extra space from the bottom so the ship isn't hidden on short screens
-const SHIP_Y_OFFSET     = 160;
-
-// Game state
 let state         = 'start';
 let difficulty    = 'Medium';
 let spawnRate     = 25;
@@ -22,151 +34,192 @@ let blockSpeed    = 400;
 let starSpeedBack = 100;
 let starSpeedFront= 200;
 let score         = 0;
+let shipType      = 'alien';
 
-// Entities
-let starsBack = [];
-let starsFront= [];
-let blocks    = [];
 const ship = {
-  x: (WIDTH - SHIP_WIDTH) / 2,
-  y: HEIGHT - SHIP_HEIGHT - SHIP_Y_OFFSET,
-  w: SHIP_WIDTH,
-  h: SHIP_HEIGHT,
+  w: 50, h: 50,
+  x: (WIDTH - 30) / 2,
+  y: HEIGHT - 230,
   speed: 400
 };
+const baseY = ship.y;
 
-// Input
 const keys = {};
-window.addEventListener('keydown', e => { keys[e.key] = true; handleKey(e.key); });
-window.addEventListener('keyup',   e => { keys[e.key] = false; });
+let starsBack = [], starsFront = [], blocks = [];
 
-function handleKey(key) {
-  if (state === 'start') {
-    if (/^[nN]$/.test(key)) startGame();
-    if (/^[sS]$/.test(key)) state = 'settings';
-  } else if (state === 'settings') {
-    if (/[1-4]/.test(key)) {
-      switch(key) {
-        case '1': setDifficulty('Easy',   40,  300, 70, 140); break;
-        case '2': setDifficulty('Medium', 25,  400,100, 200); break;
-        case '3': setDifficulty('Hard',   12,  600,150, 300); break;
-        case '4': setDifficulty('Extreme',7,   800,250, 500); break;
-      }
-      state = 'start';
-    }
-  } else if (state === 'gameover') {
-    if (/^[rR]$/.test(key)) state = 'start';
-    if (/^[qQ]$/.test(key)) state = 'start';
-  }
+function hideAllShips() {
+  alienEl.style.display = rocketEl.style.display = 'none';
 }
 
-function setDifficulty(name, sr, bs, ssb, ssf) {
-  difficulty    = name;
-  spawnRate     = sr;
-  blockSpeed    = bs;
-  starSpeedBack = ssb;
-  starSpeedFront= ssf;
+function showStartScreen() {
+  state = 'start';
+  selectShipBtn.textContent = `Ship: ${shipType === 'alien' ? 'Alien Ship' : 'Rocket'}`;
+  selectDiffBtn.textContent = `Difficulty: ${difficulty}`;
+  startScreen.style.display    = 'flex';
+  shipScreen.style.display     =
+  diffScreen.style.display     =
+  gameoverScreen.style.display = 'none';
+  hideAllShips();
+}
+
+function showShipScreen() {
+  state = 'shipSelect';
+  shipScreen.style.display     = 'flex';
+  startScreen.style.display    =
+  diffScreen.style.display     =
+  gameoverScreen.style.display = 'none';
+}
+
+function showDiffScreen() {
+  state = 'difficulty';
+  diffScreen.style.display     = 'flex';
+  startScreen.style.display    =
+  shipScreen.style.display     =
+  gameoverScreen.style.display = 'none';
+}
+
+function showGameOverScreen() {
+  state = 'gameover';
+  gameoverScreen.style.display = 'flex';
+  startScreen.style.display    =
+  shipScreen.style.display     =
+  diffScreen.style.display     = 'none';
+  finalScoreEl.textContent     = `Total Points: ${score}`;
+  hideAllShips();
+}
+
+selectShipBtn.addEventListener('click', showShipScreen);
+selectDiffBtn.addEventListener('click', showDiffScreen);
+shipBackBtn.addEventListener('click', showStartScreen);
+diffBackBtn.addEventListener('click', showStartScreen);
+
+chooseAlien.addEventListener('click', () => {
+  shipType = 'alien';
+  showStartScreen();
+});
+chooseRocket.addEventListener('click', () => {
+  shipType = 'rocket';
+  showStartScreen();
+});
+
+diffButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    difficulty = btn.dataset.diff;
+    const cfgs = {
+      Easy:   [40, 300,  70, 140],
+      Medium: [25, 400, 100, 200],
+      Hard:   [12, 600, 150, 300],
+      Extreme:[7,  800, 250, 500]
+    };
+    [spawnRate, blockSpeed, starSpeedBack, starSpeedFront] = cfgs[difficulty];
+    showStartScreen();
+  });
+});
+
+startBtn.addEventListener('click', startGame);
+retryBtn.addEventListener('click', startGame);
+homeBtn.addEventListener('click', showStartScreen);
+
+function createStars(n) {
+  return Array.from({ length: n }, () => ({
+    x: Math.random() * WIDTH,
+    y: Math.random() * HEIGHT
+  }));
 }
 
 function startGame() {
-  state     = 'playing';
-  score     = 0;
-  blocks    = [];
-  ship.x    = (WIDTH - SHIP_WIDTH) / 2;
-  ship.y    = HEIGHT - SHIP_HEIGHT - SHIP_Y_OFFSET;
-  starsBack = createStars(80);
-  starsFront= createStars(40);
+  state      = 'playing';
+  score      = 0;
+  ship.x     = (WIDTH - ship.w) / 2;
+  ship.y     = baseY;
+  blocks     = [];
+  starsBack  = createStars(80);
+  starsFront = createStars(40);
+  startScreen.style.display    =
+  shipScreen.style.display     =
+  diffScreen.style.display     =
+  gameoverScreen.style.display = 'none';
 }
 
-function createStars(n) {
-  const arr = [];
-  for (let i = 0; i < n; i++) arr.push({ x: Math.random()*WIDTH, y: Math.random()*HEIGHT });
-  return arr;
-}
+window.addEventListener('keydown', e => { keys[e.key] = true; });
+window.addEventListener('keyup',   e => { keys[e.key] = false; });
 
 function update(dt) {
   if (state !== 'playing') return;
-  if (keys['ArrowLeft']  && ship.x > 0)               ship.x -= ship.speed * dt;
-  if (keys['ArrowRight'] && ship.x + ship.w < WIDTH) ship.x += ship.speed * dt;
-  moveStars(starsBack,  starSpeedBack,  dt);
-  moveStars(starsFront, starSpeedFront, dt);
-  if (Math.random() < dt * 60 / spawnRate) blocks.push({ x: Math.random()*(WIDTH-20), y: -20, w:20, h:20 });
+  if ((keys['ArrowLeft'] || keys['a']) && ship.x > 0) ship.x -= ship.speed * dt;
+  if ((keys['ArrowRight'] || keys['d']) && ship.x + ship.w < WIDTH) ship.x += ship.speed * dt;
+  if ((keys['ArrowUp'] || keys['w']) && ship.y > 0) ship.y -= ship.speed * dt;
+  if ((keys['ArrowDown'] || keys['s']) && ship.y < baseY) ship.y += ship.speed * dt;
+  starsBack.forEach(s => { s.y += starSpeedBack * dt; if (s.y > HEIGHT) { s.y = 0; s.x = Math.random() * WIDTH; } });
+  starsFront.forEach(s => { s.y += starSpeedFront * dt; if (s.y > HEIGHT) { s.y = 0; s.x = Math.random() * WIDTH; } });
+  if (Math.random() < dt * 60 / spawnRate) {
+    blocks.push({ x: Math.random() * (WIDTH - 20), y: -20, w: 20, h: 20 });
+  }
   blocks = blocks.filter(b => {
     b.y += blockSpeed * dt;
-    if (collides(b, ship)) { state = 'gameover'; return false; }
-    if (b.y > HEIGHT) { score++; return false; }
+    if (b.x < ship.x + ship.w && b.x + b.w > ship.x &&
+        b.y < ship.y + ship.h && b.y + b.h > ship.y) {
+      showGameOverScreen();
+      return false;
+    }
+    if (b.y > HEIGHT) {
+      score++;
+      return false;
+    }
     return true;
   });
 }
 
-function moveStars(arr, speed, dt) {
-  arr.forEach(s => {
-    s.y += speed * dt;
-    if (s.y > HEIGHT) { s.y = 0; s.x = Math.random()*WIDTH; }
-  });
+function drawText(txt, x, y, font, align = 'center') {
+  ctx.fillStyle = '#fff';
+  ctx.font       = font;
+  ctx.textAlign = align;
+  ctx.fillText(txt, x, y);
 }
 
 function draw() {
-  const grad = ctx.createLinearGradient(0,0,0,HEIGHT);
+  const grad = ctx.createLinearGradient(0, 0, 0, HEIGHT);
   grad.addColorStop(0, 'rgb(10,10,40)');
   grad.addColorStop(1, 'rgb(0,0,0)');
   ctx.fillStyle = grad;
-  ctx.fillRect(0,0,WIDTH,HEIGHT);
-
-  if (state === 'start') {
-    drawText('STAR DODGER', WIDTH/2, HEIGHT/3, '48px Impact');
-    drawText('Earn points by dodging blocks!', WIDTH/2, HEIGHT/3 + 60, '24px Verdana');
-    drawText('N: New Game   S: Settings', WIDTH/2, HEIGHT/2, '24px Verdana');
-  } else if (state === 'settings') {
-    drawText('SETTINGS', WIDTH/2, HEIGHT/4, '48px Impact');
-    drawText('1 - Easy   2 - Medium   3 - Hard   4 - Extreme', WIDTH/2, HEIGHT/2, '24px Verdana');
-    drawText(`Current: ${difficulty}`, WIDTH/2, HEIGHT*3/4, '24px Verdana');
-  } else if (state === 'playing') {
-    ctx.fillStyle = STAR_BACK_COLOR;
-    starsBack.forEach(s => ctx.fillRect(s.x,s.y,2,2));
-    ctx.fillStyle = STAR_FRONT_COLOR;
-    starsFront.forEach(s => ctx.fillRect(s.x,s.y,2,2));
-    ctx.fillStyle = BLOCK_COLOR;
-    blocks.forEach(b => ctx.fillRect(b.x,b.y,b.w,b.h));
-    ctx.fillStyle = SHIP_FILL_COLOR;
-    ctx.beginPath();
-    ctx.moveTo(ship.x + ship.w/2, ship.y);
-    ctx.lineTo(ship.x + ship.w, ship.y + ship.h);
-    ctx.lineTo(ship.x, ship.y + ship.h);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = SHIP_BORDER_COLOR;
-    ctx.lineWidth = 3;
-    ctx.stroke();
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  if (state === 'playing') {
+    ctx.fillStyle = '#444';
+    starsBack.forEach(s => ctx.fillRect(s.x, s.y, 2, 2));
+    ctx.fillStyle = '#888';
+    starsFront.forEach(s => ctx.fillRect(s.x, s.y, 2, 2));
+    ctx.fillStyle = '#fff';
+    blocks.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
+    hideAllShips();
+    if (shipType === 'alien') {
+      ctx.fillStyle = '#0ff';
+      ctx.beginPath();
+      ctx.moveTo(ship.x + ship.w / 2, ship.y);
+      ctx.lineTo(ship.x + ship.w, ship.y + ship.h);
+      ctx.lineTo(ship.x, ship.y + ship.h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#f0f';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    } else {
+      rocketEl.style.display = 'block';
+      rocketEl.style.left    = `${ship.x}px`;
+      rocketEl.style.top     = `${ship.y}px`;
+    }
     drawText(`Score: ${score}`, 10, 30, '20px Verdana', 'left');
-    drawText(difficulty, WIDTH-10, 30, '20px Verdana', 'right');
-  } else if (state === 'gameover') {
-    drawText('GAME OVER', WIDTH/2, HEIGHT/3, '48px Impact');
-    drawText(`Total Points: ${score}`, WIDTH/2, HEIGHT/2, '24px Verdana');
-    drawText('R: Restart   Q: Quit', WIDTH/2, HEIGHT*2/3, '24px Verdana');
+    drawText(`Difficulty: ${difficulty}`, WIDTH - 10, 30, '20px Verdana', 'right');
   }
 }
 
-function drawText(text, x, y, font, align = 'center') {
-  ctx.fillStyle = BLOCK_COLOR;
-  ctx.font = font;
-  ctx.textAlign = align;
-  ctx.fillText(text, x, y);
-}
-
-function collides(a, b) {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
-
 let lastTime = 0;
-function loop(ts) {
-  const dt = (ts - lastTime) / 1000;
-  lastTime = ts;
+function loop(time) {
+  const dt = (time - lastTime) / 1000;
+  lastTime = time;
   update(dt);
   draw();
   requestAnimationFrame(loop);
 }
 
-starsBack  = createStars(80);
-starsFront = createStars(40);
+showStartScreen();
 requestAnimationFrame(loop);
