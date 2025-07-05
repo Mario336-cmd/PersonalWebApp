@@ -37,13 +37,15 @@ nav ul li a {
   font-size: 1.25rem;
   letter-spacing: 0.1em;
   padding: 0.5rem 1rem;
-  transition: color 0.3s, background 0.3s;
   border-radius: 0.5rem;
+  will-change: transform;
+  transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
 
 nav ul li a:hover {
   color: #d1d5db;
   background: rgba(255,255,255,0.1);
+  transform: translateY(-3px);
 }
 
 .section {
