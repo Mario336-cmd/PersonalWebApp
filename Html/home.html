@@ -6,7 +6,6 @@
   <title>Mario Uushunga</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <script src="../Javascript/vanilla-tilt.min.js" defer></script>
   <link rel="stylesheet" href="../CSS/style.css"/>
   <style>
     body{opacity:0;transition:opacity .5s ease}
@@ -40,19 +39,19 @@
     <h2 class="text-4xl font-bold mb-12">Certifications</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4 max-w-6xl">
       <div class="cert-card fill">
-        <img src="../Images/Screenshot 2025-06-25 195238.png" class="rounded mb-4 border border-gray-600"/>
+        <img loading="lazy" src="../Images/Screenshot 2025-06-25 195238.png" class="rounded mb-4 border border-gray-600"/>
         <a href="https://www.freecodecamp.org/certification/MarioUushunga/responsive-web-design" class="cert-link" data-item="Responsive Web Design" target="_blank" rel="noopener noreferrer">Responsive Web Design</a>
       </div>
       <div class="cert-card fill">
-        <img src="../Images/Screenshot 2025-06-25 195320.png" class="rounded mb-4 border border-gray-600"/>
+        <img loading="lazy" src="../Images/Screenshot 2025-06-25 195320.png" class="rounded mb-4 border border-gray-600"/>
         <a href="https://www.freecodecamp.org/certification/MarioUushunga/javascript-algorithms-and-data-structures-v8" class="cert-link" data-item="JS Algorithms & Data Structures" target="_blank" rel="noopener noreferrer">JS Algorithms & Data Structures</a>
       </div>
       <div class="cert-card fill">
-        <img src="../Images/Screenshot 2025-06-25 195345.png" class="rounded mb-4 border border-gray-600"/>
+        <img loading="lazy" src="../Images/Screenshot 2025-06-25 195345.png" class="rounded mb-4 border border-gray-600"/>
         <a href="https://www.freecodecamp.org/certification/MarioUushunga/front-end-development-libraries" class="cert-link" data-item="Front End Development Libraries" target="_blank" rel="noopener noreferrer">Front End Development Libraries</a>
       </div>
       <div class="cert-card fill">
-        <img src="../Images/Screenshot 2025-06-25 195411.png" class="rounded mb-4 border border-gray-600"/>
+        <img loading="lazy" src="../Images/Screenshot 2025-06-25 195411.png" class="rounded mb-4 border border-gray-600"/>
         <a href="https://www.freecodecamp.org/certification/MarioUushunga/data-visualization" class="cert-link" data-item="Data Visualization" target="_blank" rel="noopener noreferrer">Data Visualization</a>
       </div>
     </div>
@@ -93,6 +92,23 @@
         setTimeout(()=>window.location=gameLink.href,500);
       });
     });
+  </script>
+  <script>
+    (function(){
+      const lowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+      if(lowPower){
+        const originalMatchMedia = window.matchMedia;
+        window.matchMedia = function(q){
+          if(q === "(hover: hover)"){ return { matches: false }; }
+          return originalMatchMedia.call(this,q);
+        };
+      } else {
+        const script = document.createElement("script");
+        script.src = "../Javascript/vanilla-tilt.min.js";
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    })();
   </script>
   <script defer src="../Javascript/home.js"></script>
 </body>
