@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <link rel="stylesheet" href="../CSS/style.css"/>
   <style>
-    body{opacity:0;transition:opacity .5s ease}
+    body{opacity:0;transition:opacity .3s ease}
     body.fade-in{opacity:1}
     body.fade-out{opacity:0}
   </style>
@@ -89,7 +89,7 @@
         e.preventDefault();
         document.body.classList.remove('fade-in');
         document.body.classList.add('fade-out');
-        setTimeout(()=>window.location=gameLink.href,500);
+        setTimeout(()=>window.location=gameLink.href,300);
       });
     });
   </script>
