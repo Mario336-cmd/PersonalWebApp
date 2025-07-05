@@ -42,10 +42,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   VanillaTilt.init(document.querySelectorAll('.tilt'), {
     max: 15,
-    speed: 400,
-    perspective: 800,
+    speed: 700,
+    perspective: 1000,
     glare: true,
-    "max-glare": 0.5
+    "max-glare": 0.5,
+    gyroscope: true
   });
 
   document.getElementById('contact-form').addEventListener('submit', e => {
