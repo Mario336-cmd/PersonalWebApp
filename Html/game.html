@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../CSS/game.css"/>
   <script defer src="../Javascript/game.js"></script>
   <style>
-    body { opacity: 0; transition: opacity .5s ease }
+    body { opacity: 0; transition: opacity .3s ease }
     body.fade-in  { opacity: 1 }
     body.fade-out { opacity: 0 }
   </style>
@@ -88,7 +88,7 @@
       backLink.addEventListener('click', e => {
         e.preventDefault();
         document.body.classList.replace('fade-in','fade-out');
-        setTimeout(() => window.location = backLink.href, 500);
+        setTimeout(() => window.location = backLink.href, 300);
       });
     });
   </script>
