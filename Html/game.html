@@ -7,31 +7,88 @@
   <link rel="stylesheet" href="../CSS/game.css"/>
   <script defer src="../Javascript/game.js"></script>
   <style>
-    body{opacity:0;transition:opacity .5s ease}
-    body.fade-in{opacity:1}
-    body.fade-out{opacity:0}
-    .nav-icon{position:absolute;top:10px;left:10px;z-index:10;display:block}
-    .nav-icon svg{
-      width:48px;
-      height:48px;
-      fill:#38bdf8;
-    }
+    body { opacity: 0; transition: opacity .5s ease }
+    body.fade-in  { opacity: 1 }
+    body.fade-out { opacity: 0 }
   </style>
 </head>
 <body class="fade-in">
-  <a id="back-link" class="nav-icon" href="home.html" aria-label="Back to Home">
+  <a id="back-link" class="nav-icon" href="home.html">
     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
   </a>
-  <canvas id="gameCanvas" width="600" height="800"></canvas>
+
+  <div id="gameContainer">
+
+    <div id="start-screen">
+      <h1>STAR DODGER</h1>
+      <p class="description">Dodge the asteroids to earn points!</p>
+      <button id="select-ship">Ship: Alien Ship</button>
+      <button id="select-difficulty">Difficulty: Medium</button>
+      <button id="start-button">Start</button>
+    </div>
+
+    <div id="ship-screen">
+      <h1>Select Ship</h1>
+      <div class="options">
+        <button id="choose-triangle">Alien Ship</button>
+        <button id="choose-rocket">Rocket</button>
+        <button id="ship-back">Back</button>
+      </div>
+    </div>
+
+    <div id="difficulty-screen">
+      <h1>Select Difficulty</h1>
+      <button data-diff="Easy">Easy</button>
+      <button data-diff="Medium">Medium</button>
+      <button data-diff="Hard">Hard</button>
+      <button data-diff="Extreme">Extreme</button>
+      <button id="diff-back">Back</button>
+    </div>
+
+    <div id="gameover-screen">
+      <h1>GAME OVER</h1>
+      <p id="final-score">Total Points: 0</p>
+      <button id="retry-button">Play Again</button>
+      <button id="home-button">Home</button>
+    </div>
+
+    <canvas id="gameCanvas" width="600" height="800"></canvas>
+
+    <div id="triangleShip" class="triangle"></div>
+
+    <div id="rocketShip">
+      <div class="rocket">
+        <div class="fuselage">
+          <div class="nose"></div>
+          <div class="head"><span class="window"></span></div>
+          <div class="neck"></div>
+          <div class="body"></div>
+          <div class="reactor"></div>
+          <div class="fire">
+            <div class="spark1"></div>
+            <div class="spark2"></div>
+            <div class="spark3"></div>
+            <div class="spark4"></div>
+            <div class="spark5"></div>
+            <div class="spark6"></div>
+          </div>
+        </div>
+        <div class="left-fin"></div>
+        <div class="left-fin-end"></div>
+        <div class="right-fin"></div>
+        <div class="right-fin-end"></div>
+      </div>
+    </div>
+
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded',()=>{
-      document.body.classList.add('fade-in');
-      const backLink=document.getElementById('back-link');
-      backLink.addEventListener('click',e=>{
+    document.addEventListener('DOMContentLoaded', () => {
+      const backLink = document.getElementById('back-link');
+      backLink.addEventListener('click', e => {
         e.preventDefault();
-        document.body.classList.remove('fade-in');
-        document.body.classList.add('fade-out');
-        setTimeout(()=>window.location=backLink.href,500);
+        document.body.classList.replace('fade-in','fade-out');
+        setTimeout(() => window.location = backLink.href, 500);
       });
     });
   </script>
