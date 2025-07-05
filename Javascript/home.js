@@ -8,10 +8,15 @@ const genShadows = (count, w, h) =>
 window.addEventListener('DOMContentLoaded', () => {
   const w = window.innerWidth;
   const h = window.innerHeight;
+  const isTouch = window.matchMedia('(hover: none)').matches;
 
-  document.getElementById('stars').style.setProperty('--shadow-small', genShadows(1000, w, h));
-  document.getElementById('stars2').style.setProperty('--shadow-medium', genShadows(500, w, h));
-  document.getElementById('stars3').style.setProperty('--shadow-big', genShadows(200, w, h));
+  const smallCount = isTouch ? 400 : 1000;
+  const mediumCount = isTouch ? 200 : 500;
+  const bigCount = isTouch ? 80 : 200;
+
+  document.getElementById('stars').style.setProperty('--shadow-small', genShadows(smallCount, w, h));
+  document.getElementById('stars2').style.setProperty('--shadow-medium', genShadows(mediumCount, w, h));
+  document.getElementById('stars3').style.setProperty('--shadow-big', genShadows(bigCount, w, h));
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -40,14 +45,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-  VanillaTilt.init(document.querySelectorAll('.tilt'), {
-    max: 15,
-    speed: 700,
-    perspective: 1000,
-    glare: true,
-    "max-glare": 0.5,
-    gyroscope: true
-  });
+  const enableTilt = window.matchMedia('(hover: hover)').matches;
+  if (enableTilt) {
+    VanillaTilt.init(document.querySelectorAll('.tilt'), {
+      max: 15,
+      speed: 700,
+      perspective: 1000,
+      glare: true,
+      "max-glare": 0.5,
+      gyroscope: true
+    });
+  }
 
   document.getElementById('contact-form').addEventListener('submit', e => {
     e.preventDefault();

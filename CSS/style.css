@@ -10,6 +10,11 @@ body {
   color: #fff;
 }
 
+a, button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body::-webkit-scrollbar {
   width: 8px;
   background: #1f2937;
@@ -71,6 +76,7 @@ nav ul li a:hover {
   user-select: none;
   display: inline-block;
   padding: 1.5rem 1.5rem;
+  backface-visibility: hidden;
 }
 
 #welcome {
@@ -273,4 +279,13 @@ nav ul li a:hover {
 
 ::selection {
   background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
