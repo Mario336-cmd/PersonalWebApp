@@ -37,6 +37,16 @@ nav {
   border-bottom-right-radius: 1rem;
 }
 
+nav .menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
 nav ul li a {
   color: #fff;
   font-size: 1.25rem;
@@ -287,5 +297,60 @@ nav ul li a:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 640px) {
+  nav {
+    height: 4rem;
+  }
+
+  nav .menu-btn {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    width: 100%;
+    background: rgba(17,24,39,0.95);
+    padding: 0.5rem 0;
+    gap: 0.25rem;
+  }
+
+  nav.open ul {
+    display: flex;
+  }
+
+  nav ul {
+    padding: 0 0.5rem;
+  }
+
+  nav ul li a {
+    font-size: 1rem;
+    padding: 0.5rem 0.5rem;
+  }
+
+  #welcome .tilt {
+    font-size: 2.5rem;
+  }
+
+  #certifications,
+  #contact {
+    height: auto;
+    padding-top: 4rem;
+  }
+
+  .back-to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+    line-height: 2.5rem;
   }
 }
