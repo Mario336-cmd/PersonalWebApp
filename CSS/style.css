@@ -289,3 +289,38 @@ nav ul li a:hover {
     scroll-behavior: auto !important;
   }
 }
+
+/* Responsive adjustments for small screens */
+@media (max-width: 640px) {
+  nav {
+    height: 4rem;
+  }
+
+  nav ul {
+    padding: 0 0.5rem;
+  }
+
+  nav ul li a {
+    font-size: 1rem;
+    padding: 0.5rem 0.5rem;
+  }
+
+  #welcome .tilt {
+    font-size: 2.5rem;
+  }
+
+  #certifications,
+  #contact {
+    height: auto;
+    padding-top: 4rem;
+  }
+
+  .back-to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+    line-height: 2.5rem;
+  }
+}
