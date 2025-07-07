@@ -308,25 +308,16 @@ body {
   100% { width: 40px; height: 40px; }
 }
 
-/* Allow scrolling on small screens instead of scaling */
+/* Mobile adjustments */
 @media (max-width: 700px) {
   body {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .nav-icon.hide {
+    display: none;
   }
   #gameContainer {
-    transform: none;
-    width: 600px;
-    height: 800px;
-  }
-}
-
-@media (max-width: 500px) {
-  body {
-    overflow: auto;
-  }
-  #gameContainer {
-    transform: none;
-    width: 600px;
-    height: 800px;
+    transform-origin: top left;
   }
 }

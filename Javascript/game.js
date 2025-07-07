@@ -23,6 +23,8 @@ const finalScoreEl = document.getElementById('final-score');
 
 const alienEl  = document.getElementById('triangleShip');
 const rocketEl = document.getElementById('rocketShip');
+const container = document.getElementById('gameContainer');
+const navIcon   = document.getElementById('back-link');
 
 const WIDTH  = canvas.width;
 const HEIGHT = canvas.height;
@@ -46,6 +48,17 @@ const baseY = ship.y;
 
 const keys = {};
 let starsBack = [], starsFront = [], blocks = [];
+let dragging = false;
+let targetX = ship.x;
+let targetY = ship.y;
+
+function updateNavIcon() {
+  if (window.innerWidth <= 700 && state === 'playing') {
+    navIcon.classList.add('hide');
+  } else {
+    navIcon.classList.remove('hide');
+  }
+}
 
 function hideAllShips() {
   alienEl.style.display = rocketEl.style.display = 'none';
@@ -60,6 +73,7 @@ function showStartScreen() {
   diffScreen.style.display     =
   gameoverScreen.style.display = 'none';
   hideAllShips();
+  updateNavIcon();
 }
 
 function showShipScreen() {
@@ -68,6 +82,7 @@ function showShipScreen() {
   startScreen.style.display    =
   diffScreen.style.display     =
   gameoverScreen.style.display = 'none';
+  updateNavIcon();
 }
 
 function showDiffScreen() {
@@ -76,6 +91,7 @@ function showDiffScreen() {
   startScreen.style.display    =
   shipScreen.style.display     =
   gameoverScreen.style.display = 'none';
+  updateNavIcon();
 }
 
 function showGameOverScreen() {
@@ -86,6 +102,7 @@ function showGameOverScreen() {
   diffScreen.style.display     = 'none';
   finalScoreEl.textContent     = `Total Points: ${score}`;
   hideAllShips();
+  updateNavIcon();
 }
 
 selectShipBtn.addEventListener('click', showShipScreen);
@@ -132,6 +149,8 @@ function startGame() {
   score      = 0;
   ship.x     = (WIDTH - ship.w) / 2;
   ship.y     = baseY;
+  targetX    = ship.x;
+  targetY    = ship.y;
   blocks     = [];
   starsBack  = createStars(80);
   starsFront = createStars(40);
@@ -139,28 +158,49 @@ function startGame() {
   shipScreen.style.display     =
   diffScreen.style.display     =
   gameoverScreen.style.display = 'none';
+  updateNavIcon();
 }
 
 window.addEventListener('keydown', e => { keys[e.key] = true; });
 window.addEventListener('keyup',   e => { keys[e.key] = false; });
 
 if (window.innerWidth <= 700) {
-  let dragging = false;
-  const updatePos = e => {
+  const applyScale = () => {
+    const scale = window.innerWidth / WIDTH;
+    container.style.transform = `scale(${scale})`;
+    updateNavIcon();
+  };
+  applyScale();
+  window.addEventListener('resize', applyScale);
+
+  let dragStartX = 0, dragStartY = 0, startShipX = 0, startShipY = 0;
+  const getPos = e => {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ship.x = Math.max(0, Math.min(WIDTH - ship.w, x - ship.w / 2));
-    ship.y = Math.max(0, Math.min(baseY, y - ship.h / 2));
+    const scaleX = rect.width / WIDTH;
+    const scaleY = rect.height / HEIGHT;
+    return {
+      x: (e.clientX - rect.left) / scaleX,
+      y: (e.clientY - rect.top) / scaleY
+    };
   };
   const start = e => {
+    const p = getPos(e);
+    dragStartX = p.x;
+    dragStartY = p.y;
+    startShipX = ship.x;
+    startShipY = ship.y;
+    targetX = ship.x;
+    targetY = ship.y;
     dragging = true;
-    updatePos(e);
     e.preventDefault();
   };
   const move = e => {
     if (!dragging) return;
-    updatePos(e);
+    const p = getPos(e);
+    const dx = p.x - dragStartX;
+    const dy = p.y - dragStartY;
+    targetX = Math.max(0, Math.min(WIDTH - ship.w, startShipX + dx));
+    targetY = Math.max(0, Math.min(baseY, startShipY + dy));
     e.preventDefault();
   };
   const end = () => { dragging = false; };
@@ -172,10 +212,24 @@ if (window.innerWidth <= 700) {
 
 function update(dt) {
   if (state !== 'playing') return;
-  if ((keys['ArrowLeft'] || keys['a']) && ship.x > 0) ship.x -= ship.speed * dt;
-  if ((keys['ArrowRight'] || keys['d']) && ship.x + ship.w < WIDTH) ship.x += ship.speed * dt;
-  if ((keys['ArrowUp'] || keys['w']) && ship.y > 0) ship.y -= ship.speed * dt;
-  if ((keys['ArrowDown'] || keys['s']) && ship.y < baseY) ship.y += ship.speed * dt;
+  if (dragging) {
+    const dx = targetX - ship.x;
+    const dy = targetY - ship.y;
+    const dist = Math.hypot(dx, dy);
+    const maxD = ship.speed * dt;
+    if (dist <= maxD) {
+      ship.x = targetX;
+      ship.y = targetY;
+    } else {
+      ship.x += dx / dist * maxD;
+      ship.y += dy / dist * maxD;
+    }
+  } else {
+    if ((keys['ArrowLeft'] || keys['a']) && ship.x > 0) ship.x -= ship.speed * dt;
+    if ((keys['ArrowRight'] || keys['d']) && ship.x + ship.w < WIDTH) ship.x += ship.speed * dt;
+    if ((keys['ArrowUp'] || keys['w']) && ship.y > 0) ship.y -= ship.speed * dt;
+    if ((keys['ArrowDown'] || keys['s']) && ship.y < baseY) ship.y += ship.speed * dt;
+  }
   starsBack.forEach(s => { s.y += starSpeedBack * dt; if (s.y > HEIGHT) { s.y = 0; s.x = Math.random() * WIDTH; } });
   starsFront.forEach(s => { s.y += starSpeedFront * dt; if (s.y > HEIGHT) { s.y = 0; s.x = Math.random() * WIDTH; } });
   if (Math.random() < dt * 60 / spawnRate) {
