@@ -311,8 +311,7 @@ body {
 /* Mobile adjustments */
 @media (max-width: 700px) {
   body {
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .nav-icon.hide {
     display: none;

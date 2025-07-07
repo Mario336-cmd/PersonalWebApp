@@ -341,6 +341,23 @@ nav ul li a:hover {
     padding: 0.5rem 0.5rem;
   }
 
+  /* Smaller star sizes on small screens */
+  #welcome #stars,
+  #welcome #stars::after {
+    width: 0.5px;
+    height: 0.5px;
+  }
+  #welcome #stars2,
+  #welcome #stars2::after {
+    width: 1px;
+    height: 1px;
+  }
+  #welcome #stars3,
+  #welcome #stars3::after {
+    width: 1.5px;
+    height: 1.5px;
+  }
+
   #welcome .tilt {
     font-size: 2.5rem;
   }
