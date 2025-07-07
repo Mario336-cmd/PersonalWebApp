@@ -144,6 +144,32 @@ function startGame() {
 window.addEventListener('keydown', e => { keys[e.key] = true; });
 window.addEventListener('keyup',   e => { keys[e.key] = false; });
 
+if (window.innerWidth <= 700) {
+  let dragging = false;
+  const updatePos = e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ship.x = Math.max(0, Math.min(WIDTH - ship.w, x - ship.w / 2));
+    ship.y = Math.max(0, Math.min(baseY, y - ship.h / 2));
+  };
+  const start = e => {
+    dragging = true;
+    updatePos(e);
+    e.preventDefault();
+  };
+  const move = e => {
+    if (!dragging) return;
+    updatePos(e);
+    e.preventDefault();
+  };
+  const end = () => { dragging = false; };
+  canvas.addEventListener('pointerdown', start, { passive: false });
+  canvas.addEventListener('pointermove', move, { passive: false });
+  canvas.addEventListener('pointerup', end);
+  canvas.addEventListener('pointercancel', end);
+}
+
 function update(dt) {
   if (state !== 'playing') return;
   if ((keys['ArrowLeft'] || keys['a']) && ship.x > 0) ship.x -= ship.speed * dt;
