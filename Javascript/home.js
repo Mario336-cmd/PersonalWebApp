@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-  const enableTilt = window.matchMedia('(hover: hover)').matches;
+  const enableTilt = window.matchMedia('(hover: hover)').matches && window.innerWidth >= 640;
   if (enableTilt) {
     VanillaTilt.init(document.querySelectorAll('.tilt'), {
       max: 15,
@@ -55,6 +55,20 @@ window.addEventListener('DOMContentLoaded', () => {
       "max-glare": 0.5,
       gyroscope: true
     });
+  }
+
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu   = document.getElementById('nav-menu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', !expanded);
+      navMenu.classList.toggle('show');
+    });
+    navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      navMenu.classList.remove('show');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }));
   }
 
   document.getElementById('contact-form').addEventListener('submit', e => {
