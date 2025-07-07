@@ -354,3 +354,27 @@ nav ul li a:hover {
     line-height: 2.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  nav {
+    height: 3.5rem;
+  }
+
+  nav ul li a {
+    font-size: 0.875rem;
+  }
+
+  #welcome .tilt {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  nav ul li a {
+    padding: 0.25rem 0.5rem;
+  }
+
+  #welcome .tilt {
+    font-size: 1.75rem;
+  }
+}
