@@ -166,7 +166,9 @@ window.addEventListener('keyup',   e => { keys[e.key] = false; });
 
 if (window.innerWidth <= 700) {
   const applyScale = () => {
-    const scale = window.innerWidth / WIDTH;
+    const scaleX = window.innerWidth  / WIDTH;
+    const scaleY = window.innerHeight / HEIGHT;
+    const scale  = Math.min(scaleX, scaleY);
     container.style.transform = `scale(${scale})`;
     updateNavIcon();
   };
