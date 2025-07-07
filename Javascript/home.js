@@ -6,17 +6,22 @@ const genShadows = (count, w, h) =>
     .join(',');
 
 window.addEventListener('DOMContentLoaded', () => {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
   const isTouch = window.matchMedia('(hover: none)').matches;
 
   const smallCount = isTouch ? 400 : 1000;
   const mediumCount = isTouch ? 200 : 500;
   const bigCount = isTouch ? 80 : 200;
 
-  document.getElementById('stars').style.setProperty('--shadow-small', genShadows(smallCount, w, h));
-  document.getElementById('stars2').style.setProperty('--shadow-medium', genShadows(mediumCount, w, h));
-  document.getElementById('stars3').style.setProperty('--shadow-big', genShadows(bigCount, w, h));
+  const setStarPositions = () => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    document.getElementById('stars').style.setProperty('--shadow-small', genShadows(smallCount, w, h));
+    document.getElementById('stars2').style.setProperty('--shadow-medium', genShadows(mediumCount, w, h));
+    document.getElementById('stars3').style.setProperty('--shadow-big', genShadows(bigCount, w, h));
+  };
+
+  setStarPositions();
+  window.addEventListener('resize', setStarPositions);
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
