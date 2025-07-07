@@ -16,9 +16,11 @@
 <body class="fade-in relative overflow-x-hidden text-white">
   <nav class="fixed top-0 w-full h-16 bg-gray-900/90 backdrop-blur flex items-center z-30">
     <button id="nav-toggle" aria-controls="nav-menu" aria-expanded="false" class="sm:hidden">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
     </button>
-    <ul id="nav-menu" class="flex justify-center w-full space-x-12">
+    <ul id="nav-menu" class="flex justify-center w-full flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 items-center">
       <li><a href="#welcome" data-item="Home">Home</a></li>
       <li><a href="#certifications" data-item="Certifications">Certifications</a></li>
       <li><a href="#contact" data-item="Contact">Contact</a></li>
