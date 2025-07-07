@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-  const enableTilt = window.matchMedia('(hover: hover)').matches;
+  const enableTilt = window.matchMedia('(hover: hover)').matches && window.innerWidth > 640;
   if (enableTilt) {
     VanillaTilt.init(document.querySelectorAll('.tilt'), {
       max: 15,

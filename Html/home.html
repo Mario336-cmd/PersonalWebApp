@@ -15,6 +15,7 @@
 </head>
 <body class="fade-in relative overflow-x-hidden text-white">
   <nav class="fixed top-0 w-full h-16 bg-gray-900/90 backdrop-blur flex items-center z-30">
+    <button id="menu-btn" class="menu-btn" aria-label="Toggle navigation">&#9776;</button>
     <ul class="flex justify-center w-full space-x-12">
       <li><a href="#welcome" data-item="Home">Home</a></li>
       <li><a href="#certifications" data-item="Certifications">Certifications</a></li>
@@ -91,6 +92,11 @@
         document.body.classList.add('fade-out');
         setTimeout(()=>window.location=gameLink.href,300);
       });
+
+      const menuBtn=document.getElementById('menu-btn');
+      const nav=document.querySelector('nav');
+      menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
+      nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
     });
   </script>
   <script>

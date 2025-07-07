@@ -37,6 +37,16 @@ nav {
   border-bottom-right-radius: 1rem;
 }
 
+nav .menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
 nav ul li a {
   color: #fff;
   font-size: 1.25rem;
@@ -294,6 +304,26 @@ nav ul li a:hover {
 @media (max-width: 640px) {
   nav {
     height: 4rem;
+  }
+
+  nav .menu-btn {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    width: 100%;
+    background: rgba(17,24,39,0.95);
+    padding: 0.5rem 0;
+    gap: 0.25rem;
+  }
+
+  nav.open ul {
+    display: flex;
   }
 
   nav ul {
