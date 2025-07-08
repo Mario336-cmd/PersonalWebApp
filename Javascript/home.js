@@ -25,10 +25,12 @@ window.addEventListener('DOMContentLoaded', () => {
   const tiltNodes = document.querySelectorAll('.tilt');
   let tiltEnabled = false;
 
+  const MIN_TILT_WIDTH = 1024;
+
   const updateTilt = () => {
     const shouldEnable =
       window.matchMedia('(hover: hover)').matches &&
-      window.innerWidth >= 640 &&
+      window.innerWidth >= MIN_TILT_WIDTH &&
       window.VanillaTilt;
     if (shouldEnable && !tiltEnabled) {
       VanillaTilt.init(tiltNodes, {
