@@ -37,8 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
         max: 35,
         speed: 700,
         perspective: 1000,
-        glare: true,
-        "max-glare": 0.5,
+        glare: false,
         gyroscope: true
       });
       tiltEnabled = true;
