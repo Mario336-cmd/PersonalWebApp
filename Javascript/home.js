@@ -21,7 +21,36 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   setStarPositions();
-  window.addEventListener('resize', setStarPositions);
+
+  const tiltNodes = document.querySelectorAll('.tilt');
+  let tiltEnabled = false;
+
+  const updateTilt = () => {
+    const shouldEnable =
+      window.matchMedia('(hover: hover)').matches &&
+      window.innerWidth >= 640 &&
+      window.VanillaTilt;
+    if (shouldEnable && !tiltEnabled) {
+      VanillaTilt.init(tiltNodes, {
+        max: 15,
+        speed: 700,
+        perspective: 1000,
+        glare: true,
+        "max-glare": 0.5,
+        gyroscope: true
+      });
+      tiltEnabled = true;
+    } else if (!shouldEnable && tiltEnabled) {
+      tiltNodes.forEach(el => el.vanillaTilt && el.vanillaTilt.destroy());
+      tiltEnabled = false;
+    }
+  };
+
+  updateTilt();
+  window.addEventListener('resize', () => {
+    setStarPositions();
+    updateTilt();
+  });
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -50,17 +79,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-  const enableTilt = window.matchMedia('(hover: hover)').matches && window.innerWidth >= 640;
-  if (enableTilt) {
-    VanillaTilt.init(document.querySelectorAll('.tilt'), {
-      max: 15,
-      speed: 700,
-      perspective: 1000,
-      glare: true,
-      "max-glare": 0.5,
-      gyroscope: true
-    });
-  }
 
   const navToggle = document.getElementById('nav-toggle');
   const navMenu   = document.getElementById('nav-menu');
