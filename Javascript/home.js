@@ -32,11 +32,10 @@ window.addEventListener('DOMContentLoaded', () => {
       window.VanillaTilt;
     if (shouldEnable && !tiltEnabled) {
       VanillaTilt.init(tiltNodes, {
-        max: 15,
+        max: 35,
         speed: 700,
         perspective: 1000,
-        glare: true,
-        "max-glare": 0.5,
+        glare: false,
         gyroscope: true
       });
       tiltEnabled = true;
