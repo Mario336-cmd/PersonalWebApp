@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const form = e.target;
     emailjs.sendForm('service_6em9ncw', 'template_2mxb04g', form)
       .then(() => {
-        alert('Message sent!');
+        alert('Message sent!🥳');
         form.reset();
       })
       .catch(() => {
