@@ -85,7 +85,7 @@
     </form>
   </section>
   <footer class="py-6 bg-black text-gray-400 text-left px-4">© 2025 Mario Uushunga</footer>
-  <button x-data="{ visible: false }" x-show="visible" @scroll.window="visible = pageYOffset > innerHeight" @click="scrollTo({ top: 0, behavior: 'smooth' })" class="back-to-top">↑</button>
+  <button x-data="{ visible: false }" x-show="visible" x-transition.opacity.duration.300ms @scroll.window="visible = pageYOffset > innerHeight" @click="scrollTo({ top: 0, behavior: 'smooth' })" class="back-to-top">↑</button>
   <script>
     document.addEventListener('DOMContentLoaded',()=>{
       document.body.classList.add('fade-in');
