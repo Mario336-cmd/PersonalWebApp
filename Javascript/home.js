@@ -97,8 +97,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('contact-form').addEventListener('submit', e => {
     e.preventDefault();
-    const msg = encodeURIComponent('message=' + e.target.message.value);
-    location.href = `mailto:uushungamario@gmail.com?subject=Contact&body=${msg}`;
+    const form = e.target;
+    emailjs.sendForm('service_6em9ncw', 'template_2mxb04g', form)
+      .then(() => {
+        alert('Message sent!');
+        form.reset();
+      })
+      .catch(() => {
+        const msg = encodeURIComponent('message=' + form.message.value);
+        location.href = `mailto:uushungamario@gmail.com?subject=Contact&body=${msg}`;
+      });
   });
 
   document.getElementById('clear-btn').addEventListener('click', () =>
