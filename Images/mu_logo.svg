@@ -1,0 +1,18 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <text
+    x="150"
+    y="160"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="150"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    letter-spacing="-8"
+    fill="rgb(229, 231, 235)"
+    stroke="rgb(75, 85, 99)"
+    stroke-width="10"
+    paint-order="stroke"
+  >
+    MU
+  </text>
+</svg>
