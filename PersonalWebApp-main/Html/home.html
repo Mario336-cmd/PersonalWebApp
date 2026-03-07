@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Mario Uushunga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <style>
+    body{opacity:0;transition:opacity .3s ease}
+    body.fade-in{opacity:1}
+    body.fade-out{opacity:0}
+  </style>
+</head>
+<body class="fade-in relative overflow-x-hidden text-white">
+  <nav class="fixed top-0 w-full h-16 bg-gray-900/90 backdrop-blur flex items-center z-30">
+    <button id="nav-toggle" aria-controls="nav-menu" aria-expanded="false" class="sm:hidden">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    <ul id="nav-menu" class="flex justify-center w-full flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 items-center">
+      <li><a href="#welcome" data-item="Home">Home</a></li>
+      <li><a href="#certifications" data-item="Certifications">Projects/Certifications</a></li>
+      <li><a href="#contact" data-item="Contact">Contact</a></li>
+      <li><a href="https://github.com/Mario336-cmd" data-item="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      <li><a id="game-link" href="game.html" data-item="Game">Game</a></li>
+    </ul>
+  </nav>
+  <section id="welcome" class="section flex flex-col items-center justify-center pt-16 h-screen">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+    <h1 data-tilt data-tilt-max="35"  data-tilt-glare="false" class="tilt text-5xl font-bold cursor-pointer">Welcome! 👋🏽</h1>
+    <p class="mt-8 max-w-2xl text-center text-xl px-4 leading-relaxed">
+  My name is Mario Uushunga. I’m an aspiring Data Scientist with a strong Software Development background, I love turning messy data into clear insights and building real world apps that actually help people and have an impact. If you would like to collaborate or just say hi, scroll down and send me an email. Also, there’s a little game waiting for you if you click the link, consider it a bonus level. 😅
+  </p>
+  </section>
+  <section id="certifications" class="section flex flex-col items-center justify-center bg-gray-900 min-h-screen py-20">
+    <h2 class="text-4xl font-bold mb-12">Projects/Certifications</h2>
+    <div class="pyramid-wrapper px-4 w-full max-w-6xl">
+      <div class="pyramid-row top-row">
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/catanddog.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://mario336-cmd.github.io/Cat-and-Dog-Classifier/" class="cert-link" alt="Cat and Dog Image" target="_blank" rel="noopener noreferrer">Cat and Dog Image Classifier</a>
+        </div>
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/healthcost.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://colab.research.google.com/drive/1q1GVvsrS-8OlOMELDfaoNVb7xG9wK7nz" class="cert-link" alt="Health Cost Image" target="_blank" rel="noopener noreferrer">Linear Regression Health Costs Calculator</a>
+        </div>
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/pythoncertification.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://www.freecodecamp.org/certification/mariouushunga/python-v9" class="cert-link" alt="Python Certification" target="_blank" rel="noopener noreferrer">Python Certification</a>
+        </div>
+      </div>
+      <div class="pyramid-row bottom-row">
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/fraudrisk.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://colab.research.google.com/drive/1EW3JkcZWM6eD2D0uI2d67VS-H_H6NVVq?usp=sharing" class="cert-link" alt="Fraud Risk Analytics Image" target="_blank" rel="noopener noreferrer">Credit Card Fraud Detection and Risk Analytics</a>
+        </div>
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/machinelearningcertificate.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://learn.deeplearning.ai/certificates/ba3714c6-4e52-47ce-8731-c6dc71644cd5" class="cert-link" alt="Machine Learning Certification" target="_blank" rel="noopener noreferrer">Machine Learning Specialization</a>
+        </div>
+        <div class="cert-card fill">
+          <img loading="lazy" src="../Images/relationaldatabasescertification.png" class="rounded mb-4 border border-gray-600 w-full"/>
+          <a href="https://www.freecodecamp.org/certification/mariouushunga/relational-databases-v9" class="cert-link" alt="Relational Database Certification" target="_blank" rel="noopener noreferrer">Relational Database Certification</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="section py-20 bg-gray-800">
+    <h2 class="text-4xl font-bold mb-8 text-center">Send me an Email</h2>
+    <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 max-w-3xl mx-auto">
+      <div class="space-y-6">
+        <div>
+          <label for="name" class="block mb-2">Name/Organization:</label>
+          <input id="name" name="name" required placeholder="Your name/Organization" class="form-input"/>
+        </div>
+        <div>
+          <label for="email" class="block mb-2">Email:</label>
+          <input id="email" type="email" name="email" required placeholder="example@gmail.com" class="form-input"/>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="message" class="block mb-2">Message:</label>
+        <textarea id="message" name="message" rows="8" required placeholder="Your message…" class="form-input flex-1 mb-4"></textarea>
+        <div class="flex space-x-6">
+          <button type="submit" class="form-btn">Send</button>
+          <button type="button" id="clear-btn" class="form-btn">Clear</button>
+        </div>
+      </div>
+    </form>
+  </section>
+  <footer class="py-6 bg-black text-gray-400 text-left px-4">© 2026 Mario Uushunga</footer>
+  <button x-data="{ visible: false }" x-show="visible" x-transition.opacity.duration.300ms @scroll.window="visible = pageYOffset > innerHeight" @click="scrollTo({ top: 0, behavior: 'smooth' })" class="back-to-top">↑</button>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.body.classList.add('fade-in');
+      const gameLink=document.getElementById('game-link');
+      gameLink.addEventListener('click',e=>{
+        e.preventDefault();
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(()=>window.location=gameLink.href,300);
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function(){ emailjs.init('fqoCXNiJeF00-xhak'); })();
+  </script>
+  <script>
+    (function(){
+      const lowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+      const smallScreen = matchMedia('(max-width: 1023px)').matches;
+      if(lowPower || smallScreen){
+        const originalMatchMedia = window.matchMedia;
+        window.matchMedia = function(q){
+          if(q === "(hover: hover)"){ return { matches: false }; }
+          return originalMatchMedia.call(this,q);
+        };
+      } else {
+        const script = document.createElement("script");
+        script.src = "../Javascript/vanilla-tilt.min.js";
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    })();
+  </script>
+  <script defer src="../Javascript/home.js"></script>
+</body>
+</html>
+
+
+
+
+
