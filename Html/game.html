@@ -2,94 +2,228 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Star Dodger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#02030a"/>
+  <title>Star Dodger 3D</title>
   <link rel="icon" type="image/svg+xml" href="../Images/mu_logo.svg"/>
   <link rel="stylesheet" href="../CSS/game.css"/>
-  <script defer src="../Javascript/game.js"></script>
-  <style>
-    body { opacity: 0; transition: opacity .3s ease }
-    body.fade-in  { opacity: 1 }
-    body.fade-out { opacity: 0 }
-  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../Javascript/vendor/three.module.min.js"
+      }
+    }
+  </script>
+  <script type="module" src="../Javascript/game.js"></script>
 </head>
-<body class="fade-in">
-  <a id="back-link" class="nav-icon" href="home.html">
-    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+<body>
+  <a id="back-link" class="nav-icon" href="home.html" aria-label="Return to home">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
   </a>
 
-  <div id="gameContainer">
+  <main id="gameContainer">
+    <canvas id="gameCanvas" tabindex="-1" aria-label="Star Dodger 3D game" aria-hidden="true" inert></canvas>
+    <div class="space-vignette" aria-hidden="true"></div>
 
-    <div id="start-screen">
-      <h1>STAR DODGER</h1>
-      <p class="description">Dodge the asteroids to earn points!</p>
-      <button id="select-ship">Ship: Alien Ship</button>
-      <button id="select-difficulty">Difficulty: Medium</button>
-      <button id="start-button">Start</button>
-    </div>
-
-    <div id="ship-screen">
-      <h1>Select Ship</h1>
-      <div class="options">
-        <button id="choose-triangle">Alien Ship</button>
-        <button id="choose-rocket">Rocket</button>
-        <button id="ship-back">Back</button>
+    <section id="loading-screen" class="screen active" aria-live="polite" aria-hidden="false">
+      <div class="screen-panel compact-panel">
+        <div class="loader" aria-hidden="true"></div>
+        <p>Preparing your ship...</p>
       </div>
-    </div>
+    </section>
 
-    <div id="difficulty-screen">
-      <h1>Select Difficulty</h1>
-      <button data-diff="Easy">Easy</button>
-      <button data-diff="Medium">Medium</button>
-      <button data-diff="Hard">Hard</button>
-      <button data-diff="Extreme">Extreme</button>
-      <button id="diff-back">Back</button>
-    </div>
+    <section id="start-screen" class="screen" aria-labelledby="game-title" aria-hidden="true" inert>
+      <div class="screen-panel start-panel">
+        <p class="eyebrow">Local 3D experiment</p>
+        <h1 id="game-title">STAR <span>DODGER</span></h1>
+        <p class="description">Fly, fight, and survive the asteroid field.</p>
 
-    <div id="gameover-screen">
-      <h1>GAME OVER</h1>
-      <p id="final-score">Total Points: 0</p>
-      <button id="retry-button">Play Again</button>
-      <button id="home-button">Home</button>
-    </div>
-
-    <canvas id="gameCanvas" width="600" height="800"></canvas>
-
-    <div id="triangleShip" class="triangle"></div>
-
-    <div id="rocketShip">
-      <div class="rocket">
-        <div class="fuselage">
-          <div class="nose"></div>
-          <div class="head"><span class="window"></span></div>
-          <div class="neck"></div>
-          <div class="body"></div>
-          <div class="reactor"></div>
-          <div class="fire">
-            <div class="spark1"></div>
-            <div class="spark2"></div>
-            <div class="spark3"></div>
-            <div class="spark4"></div>
-            <div class="spark5"></div>
-            <div class="spark6"></div>
-          </div>
+        <div class="menu-buttons">
+          <button id="select-ship" class="secondary-button" type="button">Ship: Alien Ship</button>
+          <button id="select-difficulty" class="secondary-button" type="button">Difficulty: Medium</button>
+          <button id="select-settings" class="secondary-button" type="button">Settings</button>
+          <button id="start-button" class="primary-button" type="button">Launch</button>
         </div>
-        <div class="left-fin"></div>
-        <div class="left-fin-end"></div>
-        <div class="right-fin"></div>
-        <div class="right-fin-end"></div>
+
+        <div class="control-hints" aria-label="Controls">
+          <span><kbd>WASD</kbd> or <kbd>Arrows</kbd> to fly</span>
+          <span><kbd>Space</kbd> to fire</span>
+          <span class="touch-hint">Drag to fly and hold FIRE to shoot</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="ship-screen" class="screen" aria-labelledby="ship-title" aria-hidden="true" inert>
+      <div class="screen-panel selection-panel">
+        <p class="eyebrow">Hangar</p>
+        <h2 id="ship-title">Select your ship</h2>
+        <div class="ship-options">
+          <button id="choose-alien" class="choice-card" data-ship="alien" type="button">
+            <span class="ship-glyph alien-glyph" aria-hidden="true"></span>
+            <strong>Alien Ship</strong>
+            <small>Fast · 3 shields</small>
+          </button>
+          <button id="choose-rocket" class="choice-card" data-ship="rocket" type="button">
+            <span class="ship-glyph rocket-glyph" aria-hidden="true"></span>
+            <strong>Rocket</strong>
+            <small>Armoured · 4 shields</small>
+          </button>
+        </div>
+        <button id="ship-back" class="text-button" type="button">Back</button>
+      </div>
+    </section>
+
+    <section id="difficulty-screen" class="screen" aria-labelledby="difficulty-title" aria-hidden="true" inert>
+      <div class="screen-panel selection-panel difficulty-panel">
+        <p class="eyebrow">Flight conditions</p>
+        <h2 id="difficulty-title">Select difficulty</h2>
+        <div class="difficulty-options">
+          <button class="difficulty-card" data-diff="Easy" type="button">
+            <strong>Easy</strong><small>Slower · fewer threats</small>
+          </button>
+          <button class="difficulty-card" data-diff="Medium" type="button">
+            <strong>Medium</strong><small>Balanced flight</small>
+          </button>
+          <button class="difficulty-card" data-diff="Hard" type="button">
+            <strong>Hard</strong><small>Faster · crowded space</small>
+          </button>
+          <button class="difficulty-card" data-diff="Extreme" type="button">
+            <strong>Extreme</strong><small>Maximum speed and density</small>
+          </button>
+        </div>
+        <button id="difficulty-back" class="text-button" type="button">Back</button>
+      </div>
+    </section>
+
+    <section id="settings-screen" class="screen" aria-labelledby="settings-title" aria-hidden="true" inert>
+      <div class="screen-panel selection-panel settings-panel">
+        <p class="eyebrow">Development</p>
+        <h2 id="settings-title">Settings</h2>
+        <div class="settings-options">
+          <button id="settings-hitboxes" class="setting-row" type="button" aria-pressed="true">
+            <span>
+              <strong>Visible hitboxes</strong>
+              <small>Show the collision shapes while testing</small>
+            </span>
+            <b id="settings-hitboxes-value">ON</b>
+          </button>
+        </div>
+        <button id="settings-back" class="text-button" type="button">Back</button>
+      </div>
+    </section>
+
+    <section id="pause-screen" class="screen" aria-labelledby="pause-title" aria-hidden="true" inert>
+      <div class="screen-panel compact-panel">
+        <p class="eyebrow">Flight suspended</p>
+        <h2 id="pause-title">PAUSED</h2>
+        <p class="description">The game paused because this window lost focus.</p>
+        <button id="resume-button" class="primary-button" type="button">Resume</button>
+      </div>
+    </section>
+
+    <section id="gameover-screen" class="screen" aria-labelledby="gameover-title" aria-hidden="true" inert>
+      <div class="screen-panel gameover-panel">
+        <p class="eyebrow">Mission ended</p>
+        <h2 id="gameover-title">GAME OVER</h2>
+        <p id="final-score" class="final-score">0</p>
+        <div class="final-stats">
+          <div><span id="final-distance">0</span><small>Distance</small></div>
+          <div><span id="final-destroyed">0</span><small>Destroyed</small></div>
+          <div><span id="final-near-misses">0</span><small>Near misses</small></div>
+        </div>
+        <div class="menu-buttons">
+          <button id="retry-button" class="primary-button" type="button">Play Again</button>
+          <button id="home-button" class="secondary-button" type="button">Main Menu</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="webgl-error" class="screen" role="alert" aria-hidden="true" inert>
+      <div class="screen-panel compact-panel">
+        <h2>3D unavailable</h2>
+        <p>This browser could not start WebGL. Try refreshing or enabling hardware acceleration.</p>
+        <button id="reload-button" class="primary-button" type="button">Refresh</button>
+      </div>
+    </section>
+
+    <div id="hud" aria-hidden="true">
+      <div class="hud-top-left">
+        <span class="hud-label">Score</span>
+        <strong id="score-value">0</strong>
+        <span id="distance-value">0 m</span>
+      </div>
+
+      <div class="hud-top-center">
+        <span id="difficulty-value">Medium</span>
+      </div>
+
+      <div class="hud-top-right">
+        <span class="hud-label">Shields</span>
+        <div id="shield-pips" class="shield-pips" aria-label="Shields">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="crosshair" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <i></i>
+      </div>
+
+      <div class="heat-display">
+        <div class="heat-copy">
+          <span>PLASMA HEAT</span>
+          <strong id="overheat-label">READY</strong>
+        </div>
+        <div class="heat-track"><span id="heat-fill"></span></div>
       </div>
     </div>
 
-  </div>
+    <button id="mobile-fire" type="button" tabindex="-1" aria-label="Fire plasma cannons" aria-hidden="true" disabled>FIRE</button>
+    <div id="damage-flash" aria-hidden="true"></div>
+  </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const backLink = document.getElementById('back-link');
-      backLink.addEventListener('click', e => {
-        e.preventDefault();
-        document.body.classList.replace('fade-in','fade-out');
-        setTimeout(() => window.location = backLink.href, 300);
+      const loadingMessage = document.querySelector('#loading-screen p');
+      const reloadButton = document.getElementById('reload-button');
+
+      setTimeout(() => {
+        const loading = document.getElementById('loading-screen');
+        if (loading.classList.contains('active')) {
+          const errorScreen = document.getElementById('webgl-error');
+          const canvas = document.getElementById('gameCanvas');
+          const fireButton = document.getElementById('mobile-fire');
+          document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+            screen.setAttribute('aria-hidden', 'true');
+            screen.setAttribute('inert', '');
+          });
+          errorScreen.classList.add('active');
+          errorScreen.setAttribute('aria-hidden', 'false');
+          errorScreen.removeAttribute('inert');
+          canvas.tabIndex = -1;
+          canvas.setAttribute('aria-hidden', 'true');
+          canvas.setAttribute('inert', '');
+          fireButton.disabled = true;
+          fireButton.tabIndex = -1;
+          fireButton.setAttribute('aria-hidden', 'true');
+          errorScreen.querySelector('h2').textContent = '3D engine unavailable';
+          errorScreen.querySelector('p').textContent = 'The local 3D engine could not load. Open this page through the local web server, then refresh.';
+          loadingMessage.textContent = '';
+          errorScreen.querySelector('h2').setAttribute('tabindex', '-1');
+          errorScreen.querySelector('h2').focus({ preventScroll: true });
+        }
+      }, 8000);
+
+      reloadButton.addEventListener('click', () => window.location.reload());
+
+      backLink.addEventListener('click', event => {
+        event.preventDefault();
+        document.body.classList.add('fade-out');
+        setTimeout(() => { window.location.href = backLink.href; }, 220);
       });
     });
   </script>
